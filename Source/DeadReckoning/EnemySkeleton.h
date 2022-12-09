@@ -23,6 +23,9 @@ public:
 	AEnemySkeleton();
 
 	UFUNCTION(BlueprintCallable, Category="Combat")
+	void TryAttack();
+
+	UFUNCTION(BlueprintCallable, Category="Combat")
 	void SetIsAttacking(const bool InIsAttacking);
 
 	UFUNCTION(BlueprintCallable)
@@ -60,15 +63,17 @@ protected:
 	float AttackDamage  = 50.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Combat")
-	float AttackKnockbackDuration = 1.5f;
+	float AttackKnockbackDuration = 0.5f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Combat")
-	float AttackKnockbackStrength = 1000.f;
+	float AttackKnockbackStrength = 100000.f;
 	
 	float MaxWalkSpeed = 400.f;
 	float AttackingWalkSpeed = 100.f;
 
 private:
+	class ADRPlayer* Player;
+	
 	void PerformAttackTrace();
 
 public:	

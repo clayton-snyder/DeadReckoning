@@ -3,7 +3,10 @@
 
 #include "EnemySkeleton.h"
 
+#include "DRPlayer.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
 AEnemySkeleton::AEnemySkeleton()
@@ -23,7 +26,9 @@ AEnemySkeleton::AEnemySkeleton()
 void AEnemySkeleton::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	Player = Cast<ADRPlayer>(UGameplayStatics::GetPlayerCharacter(this, 0));
+	check(Player != nullptr);
 }
 
 // Called every frame
@@ -38,7 +43,34 @@ void AEnemySkeleton::Tick(float DeltaTime)
 	{
 		DrawDebugLine(GetWorld(), SwordMesh->GetSocketLocation(TEXT("Base")), SwordMesh->GetSocketLocation(TEXT("Tip")),
 					  FColor::Red, false, 3, 0, 1);
+		PerformAttackTrace();
 	}
+}
+
+void AEnemySkeleton::PerformAttackTrace()
+{
+	FVector SwordBase = SwordMesh->GetSocketLocation(TEXT("Base"));
+	FVector SwordTip = SwordMesh->GetSocketLocation(TEXT("Tip"));
+
+	TArray<FHitResult> SwordHits;
+	GetWorld()->LineTraceMultiByChannel(SwordHits, SwordBase, SwordTip, ECC_Pawn);
+	for (FHitResult HitResult : SwordHits)
+	{
+		if (HitResult.GetActor() == nullptr || HitResult.GetActor() != Player) continue;
+		
+		FVector SkeleToPlayerDir = (GetActorLocation() - Player->GetActorLocation()).GetSafeNormal();
+
+		Player->TakeKnockback(AttackKnockbackDuration, SkeleToPlayerDir * AttackKnockbackStrength);
+
+		// ApplyDamage HAS to be called at the end of this logic in case it destroys the enemy
+		UGameplayStatics::ApplyDamage(Player, AttackDamage, GetController(), this, UDamageType::StaticClass());
+	}
+}
+
+void AEnemySkeleton::TryAttack()
+{
+	AttackRequestedTimer = 0.2f;
+	if (KnockbackTimer <= 0.f) SetIsAttacking(true);
 }
 
 void AEnemySkeleton::SetIsAttacking(const bool InIsAttacking)

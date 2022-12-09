@@ -155,6 +155,7 @@ void ADRPlayer::TakeKnockback(const float& KnockbackDuration, const FVector& Imp
 {
 	UE_LOG(LogTemp, Warning, TEXT("Set Player KnockbackTimer to %.1f"), KnockbackDuration);
 	KnockbackTimer = KnockbackDuration;
+	GetCharacterMovement()->AddImpulse(Impulse, true);
 }
 
 void ADRPlayer::Die()
