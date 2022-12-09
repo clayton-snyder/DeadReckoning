@@ -59,28 +59,36 @@ void ADRPlayer::Tick(float DeltaTime)
 
 void ADRPlayer::PerformAttackTrace()
 {
-	DrawDebugLine(GetWorld(), SwordMesh->GetSocketLocation(TEXT("Base")), SwordMesh->GetSocketLocation(TEXT("Tip")),
-				  FColor::Green, false, 3, 0, 1);
+	FVector SwordBase = SwordMesh->GetSocketLocation(TEXT("Base"));
+	FVector SwordTip = SwordMesh->GetSocketLocation(TEXT("Tip"));
+	// DrawDebugLine(GetWorld(), SwordMesh->GetSocketLocation(TEXT("Base")), SwordMesh->GetSocketLocation(TEXT("Tip")),
+	// 			  FColor::Green, false, 3, 0, 1);
+	// FVector DebugBox = FVector(30.f, 30.f, 10.f);
+	// DrawDebugBox(GetWorld(), SwordBase, DebugBox, FColor::Red, false, 3);
+	// DrawDebugBox(GetWorld(), (SwordBase + SwordTip) / 2, DebugBox, FColor::Red, false, 3);
+	// DrawDebugBox(GetWorld(), SwordTip, DebugBox, FColor::Red, false, 3);
 
 	TArray<FHitResult> SwordHits;
 	FCollisionQueryParams Params;
 	Params.AddIgnoredActors(HitByAttackThisTrace);
-	GetWorld()->LineTraceMultiByChannel(SwordHits, SwordMesh->GetSocketLocation(TEXT("Base")),
-										SwordMesh->GetSocketLocation(TEXT("Tip")), UDRConstants::TraceChannelEnemy,
-										Params);
+	FCollisionShape Shape = FCollisionShape::MakeBox(FVector3f(15.f, 15.f, 5.f));
+	GetWorld()->SweepMultiByChannel(SwordHits, SwordBase, SwordTip, FQuat::Identity,
+	                                UDRConstants::TraceChannelEnemy, Shape, Params);
+	// GetWorld()->LineTraceMultiByChannel(SwordHits, SwordBase, SwordTip, UDRConstants::TraceChannelEnemy,
+	//                                     Params);
 
 	for (FHitResult HitResult : SwordHits)
 	{
 		if (HitResult.GetActor() == nullptr) continue; // We don't care about anything without an Actor
-		
+
 		HitByAttackThisTrace.Add(HitResult.GetActor());
 		AEnemySkeleton* Skele = Cast<AEnemySkeleton>(HitResult.GetActor());
-		
+
 		if (Skele == nullptr) continue;
-		
+
 		FVector SkeleLoc = HitResult.GetActor()->GetActorLocation();
 		FVector PlayerToSkeleDir = (SkeleLoc - GetActorLocation()).GetSafeNormal();
-		
+
 		Skele->TakeKnockback(AttackKnockbackDuration, PlayerToSkeleDir * AttackKnockbackStrength);
 		Skele->SetActorRotation(UKismetMathLibrary::FindLookAtRotation(SkeleLoc, GetActorLocation()));
 
@@ -143,7 +151,7 @@ void ADRPlayer::SetTraceAttack(const bool bInTraceAttack)
 }
 
 
-void ADRPlayer::TakeKnockback(const float& KnockbackDuration, const FVector &Impulse)
+void ADRPlayer::TakeKnockback(const float& KnockbackDuration, const FVector& Impulse)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Set Player KnockbackTimer to %.1f"), KnockbackDuration);
 	KnockbackTimer = KnockbackDuration;
