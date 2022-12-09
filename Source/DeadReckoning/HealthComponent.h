@@ -22,6 +22,8 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	float MaxHealth = 100.0f; // Should be overridden in the BP owner class
+
+	UPROPERTY(VisibleAnywhere)
 	float CurrHealth = 0.f;
 
 	UFUNCTION()
