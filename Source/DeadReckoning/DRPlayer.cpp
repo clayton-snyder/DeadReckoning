@@ -52,6 +52,7 @@ void ADRPlayer::Tick(float DeltaTime)
 
 	AttackRequestedTimer -= DeltaTime;
 	KnockbackTimer -= DeltaTime;
+	FlashTime -= DeltaTime;
 
 
 	if (bTraceAttack) PerformAttackTrace();
@@ -74,9 +75,9 @@ void ADRPlayer::PerformAttackTrace()
 	FCollisionShape Shape = FCollisionShape::MakeBox(FVector3f(15.f, 15.f, 5.f));
 	GetWorld()->SweepMultiByChannel(SwordHits, SwordBase, SwordTip, FQuat::Identity,
 	                                UDRConstants::TraceChannelEnemy, Shape, Params);
-	// GetWorld()->LineTraceMultiByChannel(SwordHits, SwordBase, SwordTip, UDRConstants::TraceChannelEnemy,
-	//                                     Params);
 
+	// Beware hitting multiple components in the same trace! The logic here won't handle that; have to ensure only one
+	// component has the collision channel enabled.
 	for (FHitResult HitResult : SwordHits)
 	{
 		if (HitResult.GetActor() == nullptr) continue; // We don't care about anything without an Actor
@@ -94,6 +95,8 @@ void ADRPlayer::PerformAttackTrace()
 
 		// ApplyDamage HAS to be called at the end of this logic in case it destroys the enemy
 		UGameplayStatics::ApplyDamage(Skele, AttackDamage, GetController(), this, UDamageType::StaticClass());
+
+		UE_LOG(LogTemp, Warning, TEXT("%s took %.1f damage from hit"), *Skele->GetActorNameOrLabel(), AttackDamage);
 	}
 }
 
@@ -112,6 +115,7 @@ void ADRPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void ADRPlayer::HandleMoveInput(const float InputStrength)
 {
+	if (bIsAttacking || KnockbackTimer > 0.f) return;
 	const FRotator ControllerRotation = FRotator(0, Controller->GetControlRotation().Yaw, 0);
 	const FVector MoveDir = ControllerRotation.RotateVector(FVector(1.f, 0.f, 0.f));
 	AddMovementInput(MoveDir, InputStrength);
@@ -119,6 +123,7 @@ void ADRPlayer::HandleMoveInput(const float InputStrength)
 
 void ADRPlayer::HandleStrafeInput(float InputStrength)
 {
+	if (bIsAttacking || KnockbackTimer > 0.f) return;
 	const FRotator ControllerRotator = FRotator(0.f, GetControlRotation().Yaw, 0.f);
 	const FVector MoveDir = ControllerRotator.RotateVector(FVector(0.f, 1.f, 0.f));
 	AddMovementInput(MoveDir, InputStrength);
@@ -132,8 +137,6 @@ void ADRPlayer::HandleAttackInput()
 
 void ADRPlayer::SetIsAttacking(const bool bInIsAttacking)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Set IsAttacking from %s to %s"),
-	       (bIsAttacking ? TEXT("TRUE") : TEXT("FALSE")), (bInIsAttacking) ? TEXT("TRUE") : TEXT("FALSE"));
 	bIsAttacking = bInIsAttacking;
 	if (bIsAttacking) GetCharacterMovement()->MaxWalkSpeed = AttackingWalkSpeed;
 	else GetCharacterMovement()->MaxWalkSpeed = MaxWalkSpeed;
@@ -150,15 +153,31 @@ void ADRPlayer::SetTraceAttack(const bool bInTraceAttack)
 	}
 }
 
+float ADRPlayer::GetFlashTime()
+{
+	return FlashTime;
+}
+
+void ADRPlayer::RefreshFlashTime()
+{
+	FlashTime = FlashTimeAfterTakingHit;
+}
+
+
 
 void ADRPlayer::TakeKnockback(const float& KnockbackDuration, const FVector& Impulse)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Set Player KnockbackTimer to %.1f"), KnockbackDuration);
+	if (FlashTime >= 0.f)
+	{
+		return;
+	}
 	KnockbackTimer = KnockbackDuration;
-	GetCharacterMovement()->AddImpulse(Impulse, true);
+	// GetCharacterMovement()->AddImpulse(Impulse, true);
 }
 
 void ADRPlayer::Die()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Player Die!!!!!!!!!!!!"));
+	UE_LOG(LogTemp, Warning, TEXT("PALYER DIE!!!!!!!!!!!!"));
+	SetActorHiddenInGame(true);
+	DisableInput(UGameplayStatics::GetPlayerController(this, 0));
 }

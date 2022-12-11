@@ -63,7 +63,7 @@ protected:
 	float AttackDamage  = 50.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Combat")
-	float AttackKnockbackDuration = 0.5f;
+	float AttackKnockbackDuration = 1.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Combat")
 	float AttackKnockbackStrength = 100000.f;

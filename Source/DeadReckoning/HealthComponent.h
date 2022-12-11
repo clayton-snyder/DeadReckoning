@@ -20,6 +20,10 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+	// Possible Character types this component could belong to. All will be nullptr except the type it is
+	class ADRPlayer* Player;
+	class AEnemySkeleton* Skele;
+
 	UPROPERTY(EditAnywhere)
 	float MaxHealth = 100.0f; // Should be overridden in the BP owner class
 

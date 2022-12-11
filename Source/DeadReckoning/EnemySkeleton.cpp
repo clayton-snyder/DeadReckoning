@@ -11,7 +11,7 @@
 // Sets default values
 AEnemySkeleton::AEnemySkeleton()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	SwordMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SwordMesh"));
@@ -39,25 +39,20 @@ void AEnemySkeleton::Tick(float DeltaTime)
 	AttackRequestedTimer -= DeltaTime;
 	KnockbackTimer -= DeltaTime;
 
-	if (bIsAttacking)
-	{
-		DrawDebugLine(GetWorld(), SwordMesh->GetSocketLocation(TEXT("Base")), SwordMesh->GetSocketLocation(TEXT("Tip")),
-					  FColor::Red, false, 3, 0, 1);
-		PerformAttackTrace();
-	}
+	if (bTraceAttack) PerformAttackTrace();
 }
 
 void AEnemySkeleton::PerformAttackTrace()
 {
 	FVector SwordBase = SwordMesh->GetSocketLocation(TEXT("Base"));
 	FVector SwordTip = SwordMesh->GetSocketLocation(TEXT("Tip"));
-
+	DrawDebugLine(GetWorld(), SwordBase, SwordTip, FColor::Red, false, 3);
 	TArray<FHitResult> SwordHits;
 	GetWorld()->LineTraceMultiByChannel(SwordHits, SwordBase, SwordTip, ECC_Pawn);
 	for (FHitResult HitResult : SwordHits)
 	{
 		if (HitResult.GetActor() == nullptr || HitResult.GetActor() != Player) continue;
-		
+
 		FVector SkeleToPlayerDir = (GetActorLocation() - Player->GetActorLocation()).GetSafeNormal();
 
 		Player->TakeKnockback(AttackKnockbackDuration, SkeleToPlayerDir * AttackKnockbackStrength);
@@ -75,8 +70,6 @@ void AEnemySkeleton::TryAttack()
 
 void AEnemySkeleton::SetIsAttacking(const bool InIsAttacking)
 {
-	UE_LOG(LogTemp, Warning, TEXT("SKELe: Set IsAttacking from %s to %s"),
-		   (bIsAttacking ? TEXT("TRUE") : TEXT("FALSE")), (InIsAttacking) ? TEXT("TRUE") : TEXT("FALSE"));
 	bIsAttacking = InIsAttacking;
 	if (bIsAttacking) GetCharacterMovement()->MaxWalkSpeed = AttackingWalkSpeed;
 	else GetCharacterMovement()->MaxWalkSpeed = MaxWalkSpeed;
@@ -88,7 +81,7 @@ void AEnemySkeleton::SetTraceAttack(const bool bInTraceAttack)
 }
 
 
-void AEnemySkeleton::TakeKnockback(const float& KnockbackDuration, const FVector &Impulse)
+void AEnemySkeleton::TakeKnockback(const float& KnockbackDuration, const FVector& Impulse)
 {
 	KnockbackTimer = KnockbackDuration;
 	GetCharacterMovement()->AddImpulse(Impulse, true); //bVelocityChange makes impulse ignore the mass

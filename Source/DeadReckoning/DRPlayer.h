@@ -61,6 +61,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Combat")
 	float KnockbackTimer = 0.f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Combat")
+	float FlashTime = 300.f;
 	
 	// Used to prevent double-hits from one swing
 	TArray<AActor*> HitByAttackThisTrace;
@@ -76,6 +79,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Combat")
 	float AttackKnockbackStrength = 1000.f;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Combat")
+	float FlashTimeAfterTakingHit = 3.0f;
+
 	float MaxWalkSpeed = 600.f;
 	float AttackingWalkSpeed = 100.f;
 
@@ -88,5 +94,11 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	UFUNCTION(BlueprintCallable)
+	float GetFlashTime();
+
+	// Set FlashTime to the default FlashTime for the character
+	void RefreshFlashTime();
 
 };
