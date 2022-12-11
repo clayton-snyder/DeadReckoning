@@ -172,6 +172,7 @@ void ADRPlayer::TakeKnockback(const float& KnockbackDuration, const FVector& Imp
 		return;
 	}
 	KnockbackTimer = KnockbackDuration;
+	bTraceAttack = false;
 	// GetCharacterMovement()->AddImpulse(Impulse, true);
 }
 

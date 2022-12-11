@@ -84,6 +84,7 @@ void AEnemySkeleton::SetTraceAttack(const bool bInTraceAttack)
 void AEnemySkeleton::TakeKnockback(const float& KnockbackDuration, const FVector& Impulse)
 {
 	KnockbackTimer = KnockbackDuration;
+	bTraceAttack = false;
 	GetCharacterMovement()->AddImpulse(Impulse, true); //bVelocityChange makes impulse ignore the mass
 }
 
