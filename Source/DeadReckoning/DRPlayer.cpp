@@ -20,6 +20,9 @@ ADRPlayer::ADRPlayer()
 	SwordMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SwordMesh"));
 	SwordMesh->SetupAttachment(GetMesh(), FName("RightHandSocket"));
 
+	TorchBP = CreateDefaultSubobject<UChildActorComponent>(TEXT("TorchBP"));
+	TorchBP->SetupAttachment(GetMesh(), FName("LeftHandSocket"));
+
 	Health = CreateDefaultSubobject<UHealthComponent>(TEXT("Health"));
 
 	// Mouse rotation will only affect camera (but movement will orient character to camera)

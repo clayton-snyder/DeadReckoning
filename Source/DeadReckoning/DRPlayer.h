@@ -14,6 +14,9 @@ class DEADRECKONING_API ADRPlayer : public ACharacter
 
 	UPROPERTY(EditAnywhere, Category="Combat")
 	USkeletalMeshComponent* SwordMesh;
+	
+	UPROPERTY(EditAnywhere, Category="Combat")
+	UChildActorComponent* TorchBP;
 
 	UPROPERTY(VisibleAnywhere, Category="Combat")
 	UHealthComponent* Health;

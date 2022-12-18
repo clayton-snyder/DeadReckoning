@@ -49,7 +49,7 @@ void AEnemySkeleton::PerformAttackTrace()
 {
 	FVector SwordBase = SwordMesh->GetSocketLocation(TEXT("Base"));
 	FVector SwordTip = SwordMesh->GetSocketLocation(TEXT("Tip"));
-	DrawDebugLine(GetWorld(), SwordBase, SwordTip, FColor::Red, false, 3);
+	// DrawDebugLine(GetWorld(), SwordBase, SwordTip, FColor::Red, false, 3);
 	TArray<FHitResult> SwordHits;
 	GetWorld()->LineTraceMultiByChannel(SwordHits, SwordBase, SwordTip, ECC_Pawn);
 	for (FHitResult HitResult : SwordHits)
