@@ -63,7 +63,7 @@ protected:
 	float KnockbackTimer = 0.f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Combat")
-	float FlashTime = 300.f;
+	float FlashTime = 1.5f;
 	
 	// Used to prevent double-hits from one swing
 	TArray<AActor*> HitByAttackThisTrace;

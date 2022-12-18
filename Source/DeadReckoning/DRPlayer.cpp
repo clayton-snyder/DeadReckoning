@@ -131,7 +131,7 @@ void ADRPlayer::HandleStrafeInput(float InputStrength)
 
 void ADRPlayer::HandleAttackInput()
 {
-	AttackRequestedTimer = 0.2f;
+	AttackRequestedTimer = 0.4f; // clicking this many seconds or less from end of current anim will buffer next attack
 	if (KnockbackTimer <= 0.f) SetIsAttacking(true);
 }
 

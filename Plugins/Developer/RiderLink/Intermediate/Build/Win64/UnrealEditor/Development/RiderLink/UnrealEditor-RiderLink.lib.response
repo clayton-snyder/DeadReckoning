@@ -7,11 +7,5 @@
 /IGNORE:4221
 /NODEFAULTLIB
 "C:\Users\Clayton\dev\games\DeadReckoning\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UnrealEditor\Development\RiderLink\Module.RiderLink.cpp.obj"
-"C:\Users\Clayton\dev\games\DeadReckoning\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UnrealEditor\Development\RiderLink\ProtocolFactory.cpp.obj"
-"C:\Users\Clayton\dev\games\DeadReckoning\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UnrealEditor\Development\RiderLink\RiderLink.cpp.obj"
-"C:\Users\Clayton\dev\games\DeadReckoning\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UnrealEditor\Development\RiderLink\BlueprintReference.Generated.cpp.obj"
-"C:\Users\Clayton\dev\games\DeadReckoning\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UnrealEditor\Development\RiderLink\ConnectionInfo.Generated.cpp.obj"
-"C:\Users\Clayton\dev\games\DeadReckoning\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UnrealEditor\Development\RiderLink\UE4Library.Generated.cpp.obj"
-"C:\Users\Clayton\dev\games\DeadReckoning\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UnrealEditor\Development\RiderLink\RdEditorModel.Generated.cpp.obj"
 "C:\Users\Clayton\dev\games\DeadReckoning\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UnrealEditor\Development\RiderLink\Default.rc2.res"
 /OUT:"C:\Users\Clayton\dev\games\DeadReckoning\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UnrealEditor\Development\RiderLink\UnrealEditor-RiderLink.lib"
