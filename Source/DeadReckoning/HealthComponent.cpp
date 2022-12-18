@@ -56,6 +56,7 @@ void UHealthComponent::DamageTaken(AActor* DamagedActor, float Damage, const UDa
 	else if (Skele != nullptr)
 	{
 		CurrHealth -= Damage;
+		Skele->UpdateHealthBar(CurrHealth, MaxHealth);
 		if (CurrHealth <= 0.f)
 		{
 			Skele->Die();

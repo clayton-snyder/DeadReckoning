@@ -17,8 +17,12 @@ class DEADRECKONING_API AEnemySkeleton : public ACharacter
 
 	UPROPERTY(VisibleAnywhere, Category="Combat")
 	UHealthComponent* Health;
+	
 
 public:
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Combat")
+	class UWidgetComponent* HealthBarWidgetComp;
+	
 	// Sets default values for this character's properties
 	AEnemySkeleton();
 
@@ -34,6 +38,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Combat")
 	void TakeKnockback(const float& KnockbackDuration, const FVector &Impulse);
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void UpdateHealthBar(float CurrHealth, float MaxHealth);
+	
 	UFUNCTION(BlueprintCallable, Category="Combat")
 	void Die();
 
@@ -71,8 +78,8 @@ protected:
 	float MaxWalkSpeed = 400.f;
 	float AttackingWalkSpeed = 100.f;
 
-private:
-	class ADRPlayer* Player;
+	UPROPERTY(BlueprintReadOnly)
+	ADRPlayer* Player;
 	
 	void PerformAttackTrace();
 

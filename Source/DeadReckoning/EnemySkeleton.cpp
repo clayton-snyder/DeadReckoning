@@ -6,7 +6,7 @@
 #include "DRPlayer.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "Kismet/KismetMathLibrary.h"
+#include "Components/WidgetComponent.h"
 
 // Sets default values
 AEnemySkeleton::AEnemySkeleton()
@@ -18,7 +18,10 @@ AEnemySkeleton::AEnemySkeleton()
 	SwordMesh->SetupAttachment(GetMesh(), "RightHandSocket");
 
 	Health = CreateDefaultSubobject<UHealthComponent>("Health");
-
+	
+	HealthBarWidgetComp = CreateDefaultSubobject<UWidgetComponent>("HealthBarWidgetComp");
+	HealthBarWidgetComp->SetupAttachment(GetRootComponent());
+	
 	GetCharacterMovement()->MaxWalkSpeed = MaxWalkSpeed;
 }
 
