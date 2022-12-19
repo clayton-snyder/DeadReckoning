@@ -50,6 +50,8 @@ protected:
 	void HandleMoveInput(float InputStrength);
 	void HandleStrafeInput(float InputStrength);
 	void HandleAttackInput();
+	void EnableTorchPlaceScan();
+	void DisableTorchPlaceScan();
 
 
 	// STATE 
@@ -70,6 +72,10 @@ protected:
 	
 	// Used to prevent double-hits from one swing
 	TArray<AActor*> HitByAttackThisTrace;
+	
+	bool bScanForTorchPlacement = false;
+	float TorchPlaceDist = 500.f;
+	void PerformTorchPlaceScan();
 
 
 	// STATS

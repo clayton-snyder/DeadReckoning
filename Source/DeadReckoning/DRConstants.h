@@ -21,6 +21,7 @@ public:
 	inline static const TCHAR* AxisLookRight = TEXT("LookRight");
 
 	inline static const TCHAR* ActionAttack = TEXT("Attack");
+	inline static const TCHAR* ActionPlaceTorchScan = TEXT("PlaceTorchScan");
 
 	static constexpr ECollisionChannel TraceChannelEnemy = ECC_GameTraceChannel2;
 };

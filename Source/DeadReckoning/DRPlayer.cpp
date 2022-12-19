@@ -59,6 +59,7 @@ void ADRPlayer::Tick(float DeltaTime)
 
 
 	if (bTraceAttack) PerformAttackTrace();
+	if (bScanForTorchPlacement) PerformTorchPlaceScan();
 }
 
 void ADRPlayer::PerformAttackTrace()
@@ -103,6 +104,23 @@ void ADRPlayer::PerformAttackTrace()
 	}
 }
 
+void ADRPlayer::PerformTorchPlaceScan()
+{
+	FVector ScanStart = GetActorLocation();
+	FVector ScanEnd = ScanStart + (GetActorForwardVector() * TorchPlaceDist);
+	DrawDebugLine(GetWorld(), ScanStart, ScanEnd, FColor::Cyan);
+	FHitResult HitResult;
+	FCollisionQueryParams Params;
+	Params.AddIgnoredActor(this);
+	GetWorld()->LineTraceSingleByChannel(HitResult, ScanStart, ScanEnd, ECC_WorldStatic, Params);
+	if (HitResult.GetComponent() != nullptr)
+	{
+		DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 10.f, 4, FColor::Silver);
+		UE_LOG(LogTemp, Display, TEXT("Component: %s, Actor: %s"),
+			*HitResult.Component->GetName(), *HitResult.GetActor()->GetActorNameOrLabel());
+	}
+}
+
 // Called to bind functionality to input
 void ADRPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -114,6 +132,8 @@ void ADRPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAxis(UDRConstants::AxisLookRight, this, &APawn::AddControllerYawInput);
 
 	PlayerInputComponent->BindAction(UDRConstants::ActionAttack, IE_Pressed, this, &ADRPlayer::HandleAttackInput);
+	PlayerInputComponent->BindAction(UDRConstants::ActionPlaceTorchScan, IE_Pressed, this, &ADRPlayer::EnableTorchPlaceScan);
+	PlayerInputComponent->BindAction(UDRConstants::ActionPlaceTorchScan, IE_Released, this, &ADRPlayer::DisableTorchPlaceScan);
 }
 
 void ADRPlayer::HandleMoveInput(const float InputStrength)
@@ -137,6 +157,20 @@ void ADRPlayer::HandleAttackInput()
 	AttackRequestedTimer = 0.4f; // clicking this many seconds or less from end of current anim will buffer next attack
 	if (KnockbackTimer <= 0.f) SetIsAttacking(true);
 }
+
+void ADRPlayer::EnableTorchPlaceScan()
+{
+	bScanForTorchPlacement = true;
+	UE_LOG(LogTemp, Display, TEXT("bScanForTorchPlacement=TRUE"));
+}
+
+void ADRPlayer::DisableTorchPlaceScan()
+{
+	bScanForTorchPlacement = false;
+	UE_LOG(LogTemp, Display, TEXT("bScanForTorchPlacement=FALSE"));
+}
+
+
 
 void ADRPlayer::SetIsAttacking(const bool bInIsAttacking)
 {
