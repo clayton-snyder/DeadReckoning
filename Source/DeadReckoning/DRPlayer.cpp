@@ -134,6 +134,8 @@ void ADRPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAction(UDRConstants::ActionAttack, IE_Pressed, this, &ADRPlayer::HandleAttackInput);
 	PlayerInputComponent->BindAction(UDRConstants::ActionPlaceTorchScan, IE_Pressed, this, &ADRPlayer::EnableTorchPlaceScan);
 	PlayerInputComponent->BindAction(UDRConstants::ActionPlaceTorchScan, IE_Released, this, &ADRPlayer::DisableTorchPlaceScan);
+	PlayerInputComponent->BindAction(UDRConstants::ActionOpenMap, IE_Pressed, this, &ADRPlayer::DisplayMapWidget);
+	PlayerInputComponent->BindAction(UDRConstants::ActionOpenMap, IE_Released, this, &ADRPlayer::CloseMapWidget);
 }
 
 void ADRPlayer::HandleMoveInput(const float InputStrength)
@@ -169,7 +171,6 @@ void ADRPlayer::DisableTorchPlaceScan()
 	bScanForTorchPlacement = false;
 	UE_LOG(LogTemp, Display, TEXT("bScanForTorchPlacement=FALSE"));
 }
-
 
 
 void ADRPlayer::SetIsAttacking(const bool bInIsAttacking)

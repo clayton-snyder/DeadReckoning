@@ -22,6 +22,7 @@ public:
 
 	inline static const TCHAR* ActionAttack = TEXT("Attack");
 	inline static const TCHAR* ActionPlaceTorchScan = TEXT("PlaceTorchScan");
+	inline static const TCHAR* ActionOpenMap = TEXT("OpenMap");
 
 	static constexpr ECollisionChannel TraceChannelEnemy = ECC_GameTraceChannel2;
 };

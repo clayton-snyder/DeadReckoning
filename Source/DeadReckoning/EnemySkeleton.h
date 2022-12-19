@@ -75,8 +75,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Combat")
 	float AttackKnockbackStrength = 100000.f;
 	
-	float MaxWalkSpeed = 400.f;
-	float AttackingWalkSpeed = 100.f;
+	float MaxWalkSpeed = 150.f;
+	float AttackingWalkSpeed = 0.f;
 
 	UPROPERTY(BlueprintReadOnly)
 	ADRPlayer* Player;

@@ -77,6 +77,12 @@ protected:
 	float TorchPlaceDist = 500.f;
 	void PerformTorchPlaceScan();
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void DisplayMapWidget();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void CloseMapWidget();
+
 
 	// STATS
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Combat")
